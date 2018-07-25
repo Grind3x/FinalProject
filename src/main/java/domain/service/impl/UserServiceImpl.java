@@ -11,14 +11,15 @@ import domain.service.UserService;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 
 public class UserServiceImpl implements UserService {
     @Override
-    public User findByEmail(String email) {
-        User user = null;
+    public Optional<User> findByEmail(String email) {
+        Optional<User> user = Optional.empty();
         try (Connection connection = ConnectionFactory.getConnection()) {
             UserDAO userDAO = new UserDAOImpl(connection);
             user = userDAO.findByEmail(email);
@@ -29,8 +30,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByFullName(String fullName) {
-        User user = null;
+    public Optional<User> findByFullName(String fullName) {
+        Optional<User> user = Optional.empty();
         try (Connection connection = ConnectionFactory.getConnection()) {
             UserDAO userDAO = new UserDAOImpl(connection);
             user = userDAO.findByFullName(fullName);
@@ -66,7 +67,7 @@ public class UserServiceImpl implements UserService {
     public boolean isValid(String email, String password) {
         try (Connection connection = ConnectionFactory.getConnection()) {
             UserDAO userDAO = new UserDAOImpl(connection);
-            User user = userDAO.findByEmail(email);
+            User user = userDAO.findByEmail(email).orElse(null);
             if (user == null) {
                 return false;
             } else {
@@ -103,8 +104,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findById(Long id) {
-        User user = null;
+    public Optional<User> findById(Long id) {
+        Optional<User> user = Optional.empty();
         try (Connection connection = ConnectionFactory.getConnection()) {
             UserDAO userDAO = new UserDAOImpl(connection);
             user = userDAO.findById(id);

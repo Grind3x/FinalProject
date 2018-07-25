@@ -6,11 +6,12 @@ import domain.model.User;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserDAO extends GenericDAO<User> {
-    User findByEmail(String email) throws SQLException;
+    Optional<User> findByEmail(String email) throws SQLException;
 
-    User findByFullName(String fullName) throws SQLException;
+    Optional<User> findByFullName(String fullName) throws SQLException;
 
     List<User> findByTest(Test test) throws SQLException;
 

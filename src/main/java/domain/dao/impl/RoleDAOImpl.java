@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 public class RoleDAOImpl implements RoleDAO {
@@ -25,7 +26,7 @@ public class RoleDAOImpl implements RoleDAO {
     }
 
     @Override
-    public Role findByName(String name) throws SQLException {
+    public Optional<Role> findByName(String name) throws SQLException {
         if (name == null) {
             throw new IllegalArgumentException();
         }
@@ -39,7 +40,7 @@ public class RoleDAOImpl implements RoleDAO {
                 }
             }
         }
-        return role;
+        return Optional.ofNullable(role);
     }
 
     @Override
@@ -73,18 +74,17 @@ public class RoleDAOImpl implements RoleDAO {
     }
 
     @Override
-    public Role findById(Long id) throws SQLException {
+    public Optional<Role> findById(Long id) throws SQLException {
         Role role = null;
         try (PreparedStatement statement = connection.prepareStatement(prop.getProperty("role.find-by-id"))) {
             statement.setLong(1, id);
-
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     role = extractRoleFromResultSet(resultSet);
                 }
             }
         }
-        return role;
+        return Optional.ofNullable(role);
     }
 
     @Override
@@ -137,7 +137,7 @@ public class RoleDAOImpl implements RoleDAO {
 
     private Long getGeneratedId(PreparedStatement statement) throws SQLException {
         ResultSet resultSet = statement.getGeneratedKeys();
-        Long generatedKey = 0L;
+        long generatedKey = 0L;
         if (resultSet.next()) {
             generatedKey = resultSet.getLong(1);
         }

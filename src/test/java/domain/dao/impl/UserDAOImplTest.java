@@ -14,6 +14,7 @@ import org.junit.Test;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -41,7 +42,7 @@ public class UserDAOImplTest extends BaseTest {
         roleDAO.insert(role);
         User user = new User("Test User", "test@test.ua", "testpass", role);
         userDAO.insert(user);
-        assertEquals(user, userDAO.findByEmail(user.getEmail()));
+        assertEquals(Optional.of(user), userDAO.findByEmail(user.getEmail()));
     }
 
     @Test
@@ -50,7 +51,7 @@ public class UserDAOImplTest extends BaseTest {
         roleDAO.insert(role);
         User user = new User("Test User", "test@test.ua", "testpass", role);
         userDAO.insert(user);
-        assertEquals(user, userDAO.findByFullName(user.getFullName()));
+        assertEquals(Optional.of(user), userDAO.findByFullName(user.getFullName()));
     }
 
     @Test
@@ -97,7 +98,7 @@ public class UserDAOImplTest extends BaseTest {
         User user = new User("Test name", "test@test.ua", "testpassword", role);
         userDAO.insert(user);
 
-        assertEquals(user, userDAO.findById(user.getId()));
+        assertEquals(Optional.of(user), userDAO.findById(user.getId()));
     }
 
     @Test
@@ -106,9 +107,9 @@ public class UserDAOImplTest extends BaseTest {
         roleDAO.insert(role);
         User user = new User("Test name", "test@test.ua", "testpassword", role);
         userDAO.insert(user);
-        assertEquals(user, userDAO.findById(user.getId()));
+        assertEquals(Optional.of(user), userDAO.findById(user.getId()));
         userDAO.remove(user);
-        assertNull(userDAO.findById(user.getId()));
+        assertFalse(userDAO.findById(user.getId()).isPresent());
     }
 
     @Test

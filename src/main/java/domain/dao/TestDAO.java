@@ -8,9 +8,10 @@ import domain.model.User;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface TestDAO extends GenericDAO<Test> {
-    Test findByName(String name) throws SQLException;
+    Optional<Test> findByName(String name) throws SQLException;
 
     List<Test> findByUser(User user) throws SQLException;
 

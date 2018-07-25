@@ -1,5 +1,6 @@
 package domain.dao.impl;
 
+import domain.dao.EmptyResultException;
 import domain.dao.OptionDAO;
 import domain.dao.QuestionDAO;
 import domain.dao.TestDAO;
@@ -27,7 +28,7 @@ public class TestDAOImpl implements TestDAO {
     }
 
     @Override
-    public Test findByName(String name) throws SQLException {
+    public Optional<Test> findByName(String name) throws SQLException {
         Test test = null;
         try (PreparedStatement statement = connection.prepareStatement(prop.getProperty("test.find-by-name"))) {
             statement.setString(1, name);
@@ -37,7 +38,7 @@ public class TestDAOImpl implements TestDAO {
                 }
             }
         }
-        return test;
+        return Optional.ofNullable(test);
     }
 
     @Override
@@ -64,12 +65,14 @@ public class TestDAOImpl implements TestDAO {
             statement.setLong(2, test.getId());
             try (ResultSet resultSet = statement.executeQuery()) {
                 for (; resultSet.next(); ) {
-                    Option option = optionDAO.findById(resultSet.getLong("option_id"));
+                    Option option = optionDAO.findById(resultSet.getLong("option_id")).orElseThrow(EmptyResultException::new);
                     allOptions.add(option);
                 }
-                return getQuestionsWithOptions(allOptions);
+            } catch (EmptyResultException e) {
+                e.printStackTrace();
             }
         }
+        return getQuestionsWithOptions(allOptions);
     }
 
     @Override
@@ -141,7 +144,7 @@ public class TestDAOImpl implements TestDAO {
     }
 
     @Override
-    public Test findById(Long id) throws SQLException {
+    public Optional<Test> findById(Long id) throws SQLException {
         Test test = null;
         try (PreparedStatement statement = connection.prepareStatement(prop.getProperty("test.find-by-id"))) {
             statement.setLong(1, id);
@@ -151,7 +154,7 @@ public class TestDAOImpl implements TestDAO {
                 }
             }
         }
-        return test;
+        return Optional.ofNullable(test);
     }
 
     @Override
@@ -219,7 +222,7 @@ public class TestDAOImpl implements TestDAO {
 
     private Long getGeneratedId(PreparedStatement statement) throws SQLException {
         ResultSet resultSet = statement.getGeneratedKeys();
-        Long generatedKey = 0L;
+        long generatedKey = 0L;
         if (resultSet.next()) {
             generatedKey = resultSet.getLong(1);
         }

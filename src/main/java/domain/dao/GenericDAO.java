@@ -2,6 +2,7 @@ package domain.dao;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public interface GenericDAO<T> {
 
@@ -9,7 +10,7 @@ public interface GenericDAO<T> {
 
     List<T> findAllLimit(int first, int max) throws SQLException;
 
-    T findById(Long id) throws SQLException;
+    Optional<T> findById(Long id) throws SQLException;
 
     void insert(T t) throws SQLException;
 

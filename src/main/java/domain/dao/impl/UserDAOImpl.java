@@ -1,5 +1,7 @@
 package domain.dao.impl;
 
+import domain.dao.EmptyResultException;
+import domain.dao.RoleDAO;
 import domain.model.Role;
 import domain.model.Test;
 import domain.model.User;
@@ -25,7 +27,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User findByEmail(String email) throws SQLException {
+    public Optional<User> findByEmail(String email) throws SQLException {
         User user = null;
         try (PreparedStatement statement = connection.prepareStatement(prop.getProperty("user.find-by-email"))) {
             statement.setString(1, email);
@@ -35,11 +37,11 @@ public class UserDAOImpl implements UserDAO {
                 }
             }
         }
-        return user;
+        return Optional.ofNullable(user);
     }
 
     @Override
-    public User findByFullName(String fullName) throws SQLException {
+    public Optional<User> findByFullName(String fullName) throws SQLException {
         User user = null;
         try (PreparedStatement statement = connection.prepareStatement(prop.getProperty("user.find-by-full-name"))) {
             statement.setString(1, fullName);
@@ -49,7 +51,7 @@ public class UserDAOImpl implements UserDAO {
                 }
             }
         }
-        return user;
+        return Optional.ofNullable(user);
     }
 
     @Override
@@ -113,7 +115,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User findById(Long id) throws SQLException {
+    public Optional<User> findById(Long id) throws SQLException {
         User user = null;
         try (PreparedStatement statement = connection.prepareStatement(prop.getProperty("user.find-by-id"))) {
             statement.setLong(1, id);
@@ -123,7 +125,7 @@ public class UserDAOImpl implements UserDAO {
                 }
             }
         }
-        return user;
+        return Optional.ofNullable(user);
     }
 
     @Override
@@ -193,6 +195,7 @@ public class UserDAOImpl implements UserDAO {
 
     private User extractUserFromResultSet(ResultSet resultSet, Role... roles) throws SQLException {
         User user = new User();
+        RoleDAO roleDAO = new RoleDAOImpl(connection);
         user.setId(resultSet.getLong("id"));
         user.setFullName(resultSet.getString("full_name"));
         user.setEmail(resultSet.getString("email"));
@@ -201,7 +204,7 @@ public class UserDAOImpl implements UserDAO {
         if (roles.length > 0) {
             user.setRole(roles[0]);
         } else {
-            user.setRole(new RoleDAOImpl(connection).findById(resultSet.getLong("role_id")));
+            user.setRole(roleDAO.findById(resultSet.getLong("role_id")).orElse(null));
         }
         return user;
     }
@@ -212,10 +215,12 @@ public class UserDAOImpl implements UserDAO {
             statement.setLong(1, user.getId());
             try (ResultSet resultSet = statement.executeQuery()) {
                 for (; resultSet.next(); ) {
-                    Test test = new TestDAOImpl(connection).findById(resultSet.getLong("test_id"));
+                    Test test = new TestDAOImpl(connection).findById(resultSet.getLong("test_id")).orElseThrow(EmptyResultException::new);
                     Integer mark = resultSet.getInt("mark");
                     result.put(test, mark);
                 }
+            } catch (EmptyResultException e) {
+                e.printStackTrace();
             }
         }
         return result;
@@ -223,7 +228,7 @@ public class UserDAOImpl implements UserDAO {
 
     private Long getGeneratedId(PreparedStatement statement) throws SQLException {
         ResultSet resultSet = statement.getGeneratedKeys();
-        Long generatedKey = 0L;
+        long generatedKey = 0L;
         if (resultSet.next()) {
             generatedKey = resultSet.getLong(1);
         }

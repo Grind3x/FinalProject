@@ -1,6 +1,7 @@
 package domain.service;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GenericService<T> {
 
@@ -8,7 +9,7 @@ public interface GenericService<T> {
 
     List<T> findAllLimit(int first, int max);
 
-    T findById(Long id);
+    Optional<T> findById(Long id);
 
     void insert(T t);
 

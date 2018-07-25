@@ -7,9 +7,10 @@ import domain.model.User;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface TestService extends GenericService<Test> {
-    Test findByName(String name);
+    Optional<Test> findByName(String name);
 
     List<Test> findByUser(User user);
 

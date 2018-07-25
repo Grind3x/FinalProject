@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -33,7 +34,7 @@ public class RoleDAOImplTest extends BaseTest {
     public void findByName() throws SQLException {
         Role role = new Role("Test");
         roleDAO.insert(role);
-        assertEquals(role, roleDAO.findByName(role.getName()));
+        assertEquals(Optional.of(role), roleDAO.findByName(role.getName()));
     }
 
     @Test
@@ -52,7 +53,7 @@ public class RoleDAOImplTest extends BaseTest {
     public void findById() throws SQLException {
         Role role = new Role("Test");
         roleDAO.insert(role);
-        assertEquals(role, roleDAO.findById(role.getId()));
+        assertEquals(Optional.of(role), roleDAO.findById(role.getId()));
     }
 
     @Test
@@ -63,7 +64,7 @@ public class RoleDAOImplTest extends BaseTest {
         role.setName("Test2");
         roleDAO.update(role);
         connection.commit();
-        assertEquals(role, roleDAO.findById(role.getId()));
+        assertEquals(Optional.of(role), roleDAO.findById(role.getId()));
     }
 
     @Test
@@ -72,7 +73,7 @@ public class RoleDAOImplTest extends BaseTest {
         roleDAO.insert(role);
         assertNotNull(roleDAO.findById(role.getId()));
         roleDAO.remove(role);
-        assertNull(roleDAO.findById(role.getId()));
+        assertFalse(roleDAO.findById(role.getId()).isPresent());
     }
 
     @Test

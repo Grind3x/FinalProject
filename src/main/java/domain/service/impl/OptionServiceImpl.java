@@ -10,6 +10,7 @@ import domain.service.OptionService;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 
@@ -54,8 +55,8 @@ public class OptionServiceImpl implements OptionService {
     }
 
     @Override
-    public Option findById(Long id) {
-        Option option = null;
+    public Optional<Option> findById(Long id) {
+        Optional<Option> option = Optional.empty();
         try (Connection connection = ConnectionFactory.getConnection()) {
             OptionDAO optionDAO = new OptionDAOImpl(connection);
             option = optionDAO.findById(id);

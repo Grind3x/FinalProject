@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 public class OptionDAOImpl implements OptionDAO {
@@ -71,7 +72,7 @@ public class OptionDAOImpl implements OptionDAO {
     }
 
     @Override
-    public Option findById(Long id) throws SQLException {
+    public Optional<Option> findById(Long id) throws SQLException {
         Option option = null;
         try (PreparedStatement statement = connection.prepareStatement(prop.getProperty("option.find-by-id"))) {
             statement.setLong(1, id);
@@ -81,7 +82,7 @@ public class OptionDAOImpl implements OptionDAO {
                 }
             }
         }
-        return option;
+        return Optional.ofNullable(option);
     }
 
     @Override
@@ -129,14 +130,14 @@ public class OptionDAOImpl implements OptionDAO {
 
     private Option extractOptionFromResultSet(ResultSet resultSet, Question... questions) throws SQLException {
         Option option = new Option();
-            option.setId(resultSet.getLong("id"));
-            option.setOptionText(resultSet.getString("option_text"));
-            if (questions.length > 0) {
-                option.setQuestion(questions[0]);
-            } else {
-                option.setQuestion(new QuestionDAOImpl(connection).findById(resultSet.getLong("question_id")));
-            }
-            option.setCorrect(resultSet.getBoolean("correct"));
+        option.setId(resultSet.getLong("id"));
+        option.setOptionText(resultSet.getString("option_text"));
+        if (questions.length > 0) {
+            option.setQuestion(questions[0]);
+        } else {
+            option.setQuestion(new QuestionDAOImpl(connection).findById(resultSet.getLong("question_id")).orElse(null));
+        }
+        option.setCorrect(resultSet.getBoolean("correct"));
 
         return option;
     }

@@ -5,11 +5,15 @@ import domain.model.Test;
 import domain.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService extends GenericService<User> {
-    User findByEmail(String email);
+    @Override
+    Optional<User> findById(Long id);
 
-    User findByFullName(String fullName);
+    Optional<User> findByEmail(String email);
+
+    Optional<User> findByFullName(String fullName);
 
     List<User> findByTest(Test test);
 

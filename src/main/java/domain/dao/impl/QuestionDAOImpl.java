@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 public class QuestionDAOImpl implements QuestionDAO {
@@ -28,7 +29,7 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public Question findByText(String text) throws SQLException {
+    public Optional<Question> findByText(String text) throws SQLException {
         Question question = null;
         try (PreparedStatement statement = connection.prepareStatement(prop.getProperty("question.find-by-text"))) {
             statement.setString(1, text);
@@ -38,7 +39,7 @@ public class QuestionDAOImpl implements QuestionDAO {
                 }
             }
         }
-        return question;
+        return Optional.ofNullable(question);
     }
 
     @Override
@@ -87,7 +88,7 @@ public class QuestionDAOImpl implements QuestionDAO {
     }
 
     @Override
-    public Question findById(Long id) throws SQLException {
+    public Optional<Question> findById(Long id) throws SQLException {
         Question question = null;
         try (PreparedStatement statement = connection.prepareStatement(prop.getProperty("question.find-by-id"))) {
             statement.setLong(1, id);
@@ -97,7 +98,7 @@ public class QuestionDAOImpl implements QuestionDAO {
                 }
             }
         }
-        return question;
+        return Optional.ofNullable(question);
     }
 
     @Override
@@ -153,14 +154,14 @@ public class QuestionDAOImpl implements QuestionDAO {
         if (tests.length > 0) {
             question.setTest(tests[0]);
         } else {
-            question.setTest(testDAO.findById(resultSet.getLong("test_id")));
+            question.setTest(testDAO.findById(resultSet.getLong("test_id")).orElse(null));
         }
         return question;
     }
 
     private Long getGeneratedId(PreparedStatement statement) throws SQLException {
         ResultSet resultSet = statement.getGeneratedKeys();
-        Long generatedKey = 0L;
+        long generatedKey = 0L;
         if (resultSet.next()) {
             generatedKey = resultSet.getLong(1);
         }

@@ -10,10 +10,7 @@ import org.junit.Test;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -43,7 +40,7 @@ public class TestDAOImplTest extends BaseTest {
     public void findByName() throws SQLException {
         domain.model.Test test = new InteractiveTest("Test");
         testDAO.insert(test);
-        assertEquals(test, testDAO.findByName(test.getName()));
+        assertEquals(Optional.of(test), testDAO.findByName(test.getName()));
     }
 
     @Test
@@ -157,7 +154,7 @@ public class TestDAOImplTest extends BaseTest {
     public void findById() throws SQLException {
         domain.model.Test test = new InteractiveTest("Test");
         testDAO.insert(test);
-        assertEquals(test, testDAO.findById(test.getId()));
+        assertEquals(Optional.of(test), testDAO.findById(test.getId()));
     }
 
     @Test
@@ -166,8 +163,8 @@ public class TestDAOImplTest extends BaseTest {
         testDAO.insert(test);
         test.setName("Test2");
         testDAO.update(test);
-        assertNull(testDAO.findByName("Test"));
-        assertEquals(test, testDAO.findByName("Test2"));
+        assertFalse(testDAO.findByName("Test").isPresent());
+        assertEquals(Optional.of(test), testDAO.findByName("Test2"));
     }
 
     @Test
@@ -176,7 +173,7 @@ public class TestDAOImplTest extends BaseTest {
         testDAO.insert(test);
         assertNotNull(testDAO.findByName("Test"));
         testDAO.remove(test);
-        assertNull(testDAO.findByName("Test"));
+        assertFalse(testDAO.findByName("Test").isPresent());
     }
 
     @Test

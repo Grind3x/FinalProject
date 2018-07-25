@@ -4,20 +4,20 @@ import domain.dao.QuestionDAO;
 import domain.dao.factory.ConnectionFactory;
 import domain.dao.impl.QuestionDAOImpl;
 import domain.model.Question;
-import domain.model.Role;
 import domain.model.Test;
 import domain.service.QuestionService;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 
 public class QuestionServiceImpl implements QuestionService {
     @Override
-    public Question findByText(String text) {
-        Question question = null;
+    public Optional<Question> findByText(String text) {
+        Optional<Question> question = Optional.empty();
         try (Connection connection = ConnectionFactory.getConnection()) {
             QuestionDAO questionDAO = new QuestionDAOImpl(connection);
             question = questionDAO.findByText(text);
@@ -67,8 +67,8 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Question findById(Long id) {
-        Question question = null;
+    public Optional<Question> findById(Long id) {
+        Optional<Question> question = Optional.empty();
         try (Connection connection = ConnectionFactory.getConnection()) {
             QuestionDAO questionDAO = new QuestionDAOImpl(connection);
             question = questionDAO.findById(id);

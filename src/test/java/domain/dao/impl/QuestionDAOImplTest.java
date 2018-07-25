@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -36,7 +37,7 @@ public class QuestionDAOImplTest extends BaseTest {
         testDAO.insert(test);
         Question question = new Question("Test", test);
         questionDAO.insert(question);
-        assertEquals(question, questionDAO.findByText(question.getText()));
+        assertEquals(Optional.of(question), questionDAO.findByText(question.getText()));
     }
 
     @Test
@@ -68,7 +69,7 @@ public class QuestionDAOImplTest extends BaseTest {
         Question question = new Question("Test", test);
         questionDAO.insert(question);
 
-        assertEquals(question, questionDAO.findById(question.getId()));
+        assertEquals(Optional.of(question), questionDAO.findById(question.getId()));
     }
 
     @Test
@@ -79,8 +80,8 @@ public class QuestionDAOImplTest extends BaseTest {
         questionDAO.insert(question);
         question.setText("New Test");
         questionDAO.update(question);
-        assertNull(questionDAO.findByText("Test"));
-        assertEquals(question, questionDAO.findByText(question.getText()));
+        assertFalse(questionDAO.findByText("Test").isPresent());
+        assertEquals(Optional.of(question), questionDAO.findByText(question.getText()));
     }
 
     @Test
@@ -91,7 +92,7 @@ public class QuestionDAOImplTest extends BaseTest {
         questionDAO.insert(question);
         assertNotNull(questionDAO.findByText(question.getText()));
         questionDAO.remove(question);
-        assertNull(questionDAO.findByText(question.getText()));
+        assertFalse(questionDAO.findByText(question.getText()).isPresent());
     }
 
     @Test

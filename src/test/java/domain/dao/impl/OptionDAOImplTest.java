@@ -14,6 +14,7 @@ import org.junit.Test;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -68,7 +69,7 @@ public class OptionDAOImplTest extends BaseTest {
         Option option = new Option("Test option", question);
         optionDAO.insert(option);
 
-        assertEquals(option, optionDAO.findById(1L));
+        assertEquals(Optional.ofNullable(option), optionDAO.findById(1L));
     }
 
     @Test
@@ -81,7 +82,7 @@ public class OptionDAOImplTest extends BaseTest {
         optionDAO.insert(option);
         option.setOptionText("New option text");
         optionDAO.update(option);
-        assertEquals(option, optionDAO.findById(option.getId()));
+        assertEquals(Optional.ofNullable(option), optionDAO.findById(option.getId()));
     }
 
     @Test
@@ -94,7 +95,7 @@ public class OptionDAOImplTest extends BaseTest {
         optionDAO.insert(option);
         assertNotNull(optionDAO.findById(option.getId()));
         optionDAO.remove(option);
-        assertNull(optionDAO.findById(option.getId()));
+        assertFalse(optionDAO.findById(option.getId()).isPresent());
     }
 
     @Test

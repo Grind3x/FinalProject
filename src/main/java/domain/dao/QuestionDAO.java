@@ -5,9 +5,10 @@ import domain.model.Test;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public interface QuestionDAO extends GenericDAO<Question> {
-    Question findByText(String text) throws SQLException;
+    Optional<Question> findByText(String text) throws SQLException;
 
     List<Question> findByTest(Test test) throws SQLException;
 }

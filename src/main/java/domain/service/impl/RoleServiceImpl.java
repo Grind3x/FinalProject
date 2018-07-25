@@ -3,20 +3,22 @@ package domain.service.impl;
 import domain.dao.RoleDAO;
 import domain.dao.factory.ConnectionFactory;
 import domain.dao.impl.RoleDAOImpl;
+import domain.model.Option;
 import domain.model.Role;
 import domain.service.RoleService;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 
 public class RoleServiceImpl implements RoleService {
 
     @Override
-    public Role findByName(String name) {
-        Role role = null;
+    public Optional<Role> findByName(String name) {
+        Optional<Role> role = Optional.empty();
         try (Connection connection = ConnectionFactory.getConnection()) {
             RoleDAO roleDAO = new RoleDAOImpl(connection);
             role = roleDAO.findByName(name);
@@ -53,8 +55,8 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role findById(Long id) {
-        Role role = null;
+    public Optional<Role> findById(Long id) {
+        Optional<Role> role = Optional.empty();
         try (Connection connection = ConnectionFactory.getConnection()) {
             RoleDAO roleDAO = new RoleDAOImpl(connection);
             role = roleDAO.findById(id);

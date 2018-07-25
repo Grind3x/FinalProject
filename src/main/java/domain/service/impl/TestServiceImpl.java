@@ -13,14 +13,15 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 
 public class TestServiceImpl implements TestService {
     @Override
-    public Test findByName(String name) {
-        Test test = null;
+    public Optional<Test> findByName(String name) {
+        Optional<Test> test = Optional.empty();
         try (Connection connection = ConnectionFactory.getConnection()) {
             TestDAO testDAO = new TestDAOImpl(connection);
             test = testDAO.findByName(name);
@@ -92,8 +93,8 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public Test findById(Long id) {
-        Test test = null;
+    public Optional<Test> findById(Long id) {
+        Optional<Test> test = Optional.empty();
         try (Connection connection = ConnectionFactory.getConnection()) {
             TestDAO testDAO = new TestDAOImpl(connection);
             test = testDAO.findById(id);
