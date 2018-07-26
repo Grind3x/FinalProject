@@ -12,11 +12,10 @@
 <body>
 <div class="unicorn"></div>
 <div class="container">
-    <div><h1>404 Error</h1></div>
+    <div><h1>403 Access Denied</h1></div>
     <div class="warning">
         <h2>"All those moments will be lost in time, like tears in rain."</h2>
-        <p>The page you are looking for might have been removed, had its name changed, or is temporarily
-            unavailable.</p>
+        <p>You do not have access to this page. Please contact your system administrator.</p>
         <a href="javascript:history.back()">Please go back to the previous page</a>
     </div>
     <div class="footer"><p class="copyright">&copy; 2018, Grind3x</p></div>

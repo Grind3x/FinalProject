@@ -2,6 +2,7 @@ package domain.dao.impl;
 
 import domain.dao.EmptyResultException;
 import domain.dao.RoleDAO;
+import domain.dao.TestDAO;
 import domain.model.Role;
 import domain.model.Test;
 import domain.model.User;
@@ -210,12 +211,13 @@ public class UserDAOImpl implements UserDAO {
     }
 
     private Map<Test, Integer> getAssessments(User user) throws SQLException {
+        TestDAO testDAO = new TestDAOImpl(connection);
         Map<Test, Integer> result = new HashMap<>();
         try (PreparedStatement statement = connection.prepareStatement(prop.getProperty("user.get-assessments"))) {
             statement.setLong(1, user.getId());
             try (ResultSet resultSet = statement.executeQuery()) {
                 for (; resultSet.next(); ) {
-                    Test test = new TestDAOImpl(connection).findById(resultSet.getLong("test_id")).orElseThrow(EmptyResultException::new);
+                    Test test = testDAO.findById(resultSet.getLong("test_id")).orElseThrow(EmptyResultException::new);
                     Integer mark = resultSet.getInt("mark");
                     result.put(test, mark);
                 }

@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
             if (user == null) {
                 return false;
             } else {
-                if (user.getPassword().equals(sha256Hex(password))) {
+                if (user.getPassword().equalsIgnoreCase(sha256Hex(password))) {
                     return true;
                 }
             }

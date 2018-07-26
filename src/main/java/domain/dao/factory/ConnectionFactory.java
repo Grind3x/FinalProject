@@ -24,6 +24,13 @@ public class ConnectionFactory {
     }
 
     public static Connection getConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         return DriverManager.getConnection(url, user, password);
+//        return DriverManager.getConnection("jdbc:mysql://localhost:3306/project?serverTimezone=Europe/Kiev&useSSL=false", "root", "rugsub53");
+
     }
 }

@@ -1,5 +1,6 @@
 package domain.dao.impl;
 
+import domain.dao.UserDAO;
 import domain.model.Role;
 import domain.dao.RoleDAO;
 
@@ -127,10 +128,11 @@ public class RoleDAOImpl implements RoleDAO {
     }
 
     private Role extractRoleFromResultSet(ResultSet resultSet) throws SQLException {
+        UserDAO userDAO = new UserDAOImpl(connection);
         Role role = new Role();
         role.setId(resultSet.getLong("id"));
         role.setName(resultSet.getString("name"));
-        role.setUsers(new UserDAOImpl(connection).findByRole(role));
+        role.setUsers(userDAO.findByRole(role));
 
         return role;
     }

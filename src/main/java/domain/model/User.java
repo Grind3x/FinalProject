@@ -129,7 +129,6 @@ public class User {
                 ", fullName='" + fullName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", assessments=" + assessments +
                 ", role=" + role.getName() +
                 '}';
     }
