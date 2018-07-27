@@ -33,8 +33,7 @@ public class LoginController extends HttpServlet {
                 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/admin.jsp");
                 dispatcher.forward(req, resp);
             } else if (user != null && user.getRole().getName().equals("student")) {
-                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/welcome.jsp");
-                dispatcher.forward(req, resp);
+                resp.sendRedirect("/test");
             }
         } else {
             req.setAttribute("error", "Incorrect email or password");

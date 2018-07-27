@@ -12,15 +12,11 @@ public class SecurityUtils {
 
     public static boolean isSecurityPage(HttpServletRequest request) {
         String urlPattern = getUrlPattern(request);
-        System.out.println(urlPattern);
         Set<Role> roles = SecurityConfig.getAllAppRoles();
-        System.out.println("all roles: " + roles);
         for (Role role : roles) {
             List<String> urlPatterns = SecurityConfig.getUrlPatternsForRole(role);
 
-            System.out.println("url patterns for role: " + urlPatterns);
             if (urlPattern != null && urlPatterns.contains(urlPattern)) {
-                System.out.println("contains. Page is security");
                 return true;
             }
         }
@@ -33,8 +29,6 @@ public class SecurityUtils {
         User user = (User) request.getSession().getAttribute("user");
         if (user != null) {
             Role userRole = user.getRole();
-            System.out.println("role: " + userRole);
-
             List<String> urlPatterns = SecurityConfig.getUrlPatternsForRole(userRole);
             return urlPattern != null && urlPatterns.contains(urlPattern);
         }

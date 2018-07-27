@@ -41,20 +41,18 @@
         <div class="col-sm-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h4>Система быстрого тестирования.</h4></div>
+                    <h4><c:out value="${test.getName()}"/></h4></div>
                 <div class="panel-body">
-                    <h4>Список доступных тестов:</h4>
-                    <c:forEach items="${tests}" var="test">
-                        <a href="/test?t=${test.getId()}">${test.getName()}</a><br>
-                    </c:forEach>
+                    <c:out value="${test.getDescription()}"/>
                 </div>
             </div>
+            <a href="/test?t=${test.getId()}&q=1"><button type="button" class="btn pull-right">Начать тест</button></a>
         </div>
     </div>
-    <footer class="text-center">2018, <strong>Grind3x</strong></footer>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/scripts.js"></script>
 </div>
+<footer class="text-center">2018, <strong>Grind3x</strong></footer>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
 </body>
 </html>
 

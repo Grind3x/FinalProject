@@ -3,7 +3,6 @@ package controller;
 import domain.model.User;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,8 +25,7 @@ public class MainController extends HttpServlet {
             RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/admin.jsp");
             requestDispatcher.forward(req, resp);
         } else if (user.getRole().getName().equals("student")) {
-            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/welcome.jsp");
-            requestDispatcher.forward(req, resp);
+            resp.sendRedirect("/test");
         }
     }
 }

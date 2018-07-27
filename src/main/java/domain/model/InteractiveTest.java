@@ -5,6 +5,7 @@ import java.util.*;
 public class InteractiveTest extends Test {
     private Long id;
     private String name;
+    private String description;
     private List<Question> questions = new ArrayList<>();
 
     public InteractiveTest() {
@@ -17,6 +18,13 @@ public class InteractiveTest extends Test {
     public InteractiveTest(Long id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public InteractiveTest(Long id, String name, String description, List<Question> questions) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.questions = questions;
     }
 
     public InteractiveTest(Long id, String name, List<Question> questions) {
@@ -45,6 +53,16 @@ public class InteractiveTest extends Test {
         this.name = name;
     }
 
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public void addQuestion(Question question) {
         if (question == null) {
             throw new IllegalArgumentException();
@@ -71,13 +89,13 @@ public class InteractiveTest extends Test {
         if (o == null || getClass() != o.getClass()) return false;
         InteractiveTest that = (InteractiveTest) o;
         return Objects.equals(name, that.name) &&
+                Objects.equals(description, that.description) &&
                 Objects.equals(questions, that.questions);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(name, questions);
+        return Objects.hash(name, description, questions);
     }
 
     @Override
@@ -85,6 +103,7 @@ public class InteractiveTest extends Test {
         return "InteractiveTest{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
                 ", questions=" + questions +
                 '}';
     }

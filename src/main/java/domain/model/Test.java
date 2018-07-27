@@ -15,6 +15,10 @@ public abstract class Test {
 
     public abstract void setQuestions(List<Question> questions);
 
+    public abstract String getDescription();
+
+    public abstract void setDescription(String description);
+
     public abstract void addQuestion(Question question);
 
 }

@@ -22,7 +22,7 @@ public class SecurityConfig {
         RoleService service = new RoleServiceImpl();
         List<String> urlPatterns = new ArrayList<>();
 
-        urlPatterns.add("/welcome.jsp");
+        urlPatterns.add("/test.jsp");
         urlPatterns.add("/test");
         urlPatterns.add("/all_test");
 
@@ -34,7 +34,7 @@ public class SecurityConfig {
         mapConfig.put(role, urlPatterns);
 
         urlPatterns = new ArrayList<>();
-        urlPatterns.add("/welcome.jsp");
+        urlPatterns.add("/test.jsp");
         urlPatterns.add("/admin.jsp");
 
         try {

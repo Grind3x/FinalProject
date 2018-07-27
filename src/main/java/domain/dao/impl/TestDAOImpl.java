@@ -161,6 +161,7 @@ public class TestDAOImpl implements TestDAO {
     public void insert(Test test) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(prop.getProperty("test.insert"), Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, test.getName());
+            statement.setString(2, test.getDescription());
             statement.executeUpdate();
             if (test.getQuestions().size() > 0) {
                 updateQuestions(test.getQuestions());
@@ -174,7 +175,8 @@ public class TestDAOImpl implements TestDAO {
     public void update(Test test) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(prop.getProperty("test.update"))) {
             statement.setString(1, test.getName());
-            statement.setLong(2, test.getId());
+            statement.setString(2, test.getDescription());
+            statement.setLong(3, test.getId());
             if (test.getQuestions().size() > 0) {
                 updateQuestions(test.getQuestions());
             }
@@ -203,13 +205,14 @@ public class TestDAOImpl implements TestDAO {
     }
 
     private Test extractTestFromResultSet(ResultSet resultSet) throws SQLException {
-        Test test = null;
+        Test test;
         QuestionDAO questionDAO = new QuestionDAOImpl(connection);
         Long id = (resultSet.getLong("id"));
         String name = resultSet.getString("name");
+        String description = resultSet.getString("description");
         Test tmp = new InteractiveTest(id, name);
         List<Question> questions = questionDAO.findByTest(tmp);
-        test = new InteractiveTest(id, name, questions);
+        test = new InteractiveTest(id, name, description, questions);
         return test;
     }
 

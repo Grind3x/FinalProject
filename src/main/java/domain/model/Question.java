@@ -45,6 +45,16 @@ public class Question {
         }
     }
 
+    public boolean isMultivariate() {
+        int count = 0;
+        for (Option option : options) {
+            if (option.isCorrect()) {
+                count++;
+            }
+        }
+        return count > 1;
+    }
+
     public Long getId() {
         return id;
     }
