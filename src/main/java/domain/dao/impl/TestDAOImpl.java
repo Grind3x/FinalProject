@@ -1,9 +1,6 @@
 package domain.dao.impl;
 
-import domain.dao.EmptyResultException;
-import domain.dao.OptionDAO;
-import domain.dao.QuestionDAO;
-import domain.dao.TestDAO;
+import domain.dao.*;
 import domain.model.*;
 
 import java.io.IOException;
@@ -89,6 +86,21 @@ public class TestDAOImpl implements TestDAO {
         }
     }
 
+    @Override
+    public List<Test> findByCategory(Category category) throws SQLException {
+        List<Test> result = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(prop.getProperty("test.find-by-category"))) {
+            statement.setLong(1, category.getId());
+            try (ResultSet resultSet = statement.executeQuery()) {
+                for (; resultSet.next(); ) {
+                    Test test = extractTestFromResultSet(resultSet, category);
+                    result.add(test);
+                }
+            }
+        }
+        return result;
+    }
+
     private Map<Question, List<Option>> getQuestionsWithOptions(List<Option> allOptions) {
         Map<Question, List<Option>> result = new HashMap<>();
         Question question;
@@ -162,6 +174,8 @@ public class TestDAOImpl implements TestDAO {
         try (PreparedStatement statement = connection.prepareStatement(prop.getProperty("test.insert"), Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, test.getName());
             statement.setString(2, test.getDescription());
+            statement.setLong(3, test.getCategory().getId());
+
             statement.executeUpdate();
             if (test.getQuestions().size() > 0) {
                 updateQuestions(test.getQuestions());
@@ -176,7 +190,9 @@ public class TestDAOImpl implements TestDAO {
         try (PreparedStatement statement = connection.prepareStatement(prop.getProperty("test.update"))) {
             statement.setString(1, test.getName());
             statement.setString(2, test.getDescription());
-            statement.setLong(3, test.getId());
+            statement.setLong(3, test.getCategory().getId());
+
+            statement.setLong(4, test.getId());
             if (test.getQuestions().size() > 0) {
                 updateQuestions(test.getQuestions());
             }
@@ -204,18 +220,6 @@ public class TestDAOImpl implements TestDAO {
         return 0;
     }
 
-    private Test extractTestFromResultSet(ResultSet resultSet) throws SQLException {
-        Test test;
-        QuestionDAO questionDAO = new QuestionDAOImpl(connection);
-        Long id = (resultSet.getLong("id"));
-        String name = resultSet.getString("name");
-        String description = resultSet.getString("description");
-        Test tmp = new InteractiveTest(id, name);
-        List<Question> questions = questionDAO.findByTest(tmp);
-        test = new InteractiveTest(id, name, description, questions);
-        return test;
-    }
-
     private void updateQuestions(List<Question> questions) throws SQLException {
         QuestionDAO questionDAO = new QuestionDAOImpl(connection);
         for (Question question : questions) {
@@ -230,5 +234,30 @@ public class TestDAOImpl implements TestDAO {
             generatedKey = resultSet.getLong(1);
         }
         return generatedKey;
+    }
+
+    private Test extractTestFromResultSet(ResultSet resultSet, Category... categories) throws SQLException {
+        Test test;
+        Category category = new Category();
+        CategoryDAO categoryDAO = new CategoryDAOImpl(connection);
+        QuestionDAO questionDAO = new QuestionDAOImpl(connection);
+
+        Long id = (resultSet.getLong("id"));
+        String name = resultSet.getString("name");
+        String description = resultSet.getString("description");
+        Test tmp = new InteractiveTest(id, name);
+
+        List<Question> questions = questionDAO.findByTest(tmp);
+        if (categories.length > 0) {
+            category = categories[0];
+        } else {
+            try {
+                category = categoryDAO.findById(resultSet.getLong("category_id")).orElseThrow(EmptyResultException::new);
+            } catch (EmptyResultException e) {
+                e.printStackTrace();
+            }
+        }
+        test = new InteractiveTest(id, name, description, category, questions);
+        return test;
     }
 }

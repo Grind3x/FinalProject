@@ -5,10 +5,10 @@
          version="4.0">
     <error-page>
         <error-code>404</error-code>
-        <location>/page-not-found-error.jsp</location>
+        <location>/error/page-not-found-error.jsp</location>
     </error-page>
     <!--<error-page>-->
         <!--<error-code>500</error-code>-->
-        <!--<location>/internal-server-error.jsp</location>-->
+        <!--<location>/error/internal-server-error.jsp</location>-->
     <!--</error-page>-->
 </web-app>

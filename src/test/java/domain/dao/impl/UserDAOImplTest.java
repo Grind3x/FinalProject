@@ -1,9 +1,7 @@
 package domain.dao.impl;
 
-import domain.dao.BaseTest;
-import domain.dao.RoleDAO;
-import domain.dao.TestDAO;
-import domain.dao.UserDAO;
+import domain.dao.*;
+import domain.model.Category;
 import domain.model.InteractiveTest;
 import domain.model.Role;
 import domain.model.User;
@@ -23,12 +21,15 @@ public class UserDAOImplTest extends BaseTest {
     private UserDAO userDAO;
     private RoleDAO roleDAO;
     private TestDAO testDAO;
+    private CategoryDAO categoryDAO;
+
 
     public UserDAOImplTest() throws SQLException {
         connection = getH2Connection();
         userDAO = new UserDAOImpl(connection);
         roleDAO = new RoleDAOImpl(connection);
         testDAO = new TestDAOImpl(connection);
+        categoryDAO = new CategoryDAOImpl(connection);
     }
 
     @Before
@@ -60,7 +61,9 @@ public class UserDAOImplTest extends BaseTest {
         roleDAO.insert(role);
         User user = new User("Test name", "test@test.ua", "testpassword", role);
         userDAO.insert(user);
-        domain.model.Test test = new InteractiveTest("Test");
+        Category category = new Category("test category");
+        categoryDAO.insert(category);
+        domain.model.Test test = new InteractiveTest("Test test", "test descr", category);
         testDAO.insert(test);
         user.addAssessment(test, 95);
         userDAO.update(user);

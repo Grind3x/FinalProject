@@ -6,6 +6,7 @@ public class InteractiveTest extends Test {
     private Long id;
     private String name;
     private String description;
+    private Category category;
     private List<Question> questions = new ArrayList<>();
 
     public InteractiveTest() {
@@ -15,9 +16,23 @@ public class InteractiveTest extends Test {
         this.name = name;
     }
 
+    public InteractiveTest(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     public InteractiveTest(Long id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public InteractiveTest(String name, String description, Category category) {
+        this.name = name;
+        this.description = description;
+        this.category = category;
+        if (!category.getTests().contains(this)) {
+            category.addTest(this);
+        }
     }
 
     public InteractiveTest(Long id, String name, String description, List<Question> questions) {
@@ -27,10 +42,16 @@ public class InteractiveTest extends Test {
         this.questions = questions;
     }
 
-    public InteractiveTest(Long id, String name, List<Question> questions) {
+    public InteractiveTest(Long id, String name, String description, Category category, List<Question> questions) {
         this.id = id;
         this.name = name;
+        this.description = description;
+        this.category = category;
         this.questions = questions;
+
+        if (!category.getTests().contains(this)) {
+            category.addTest(this);
+        }
     }
 
     @Override
@@ -63,6 +84,22 @@ public class InteractiveTest extends Test {
         this.description = description;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    @Override
+    public List<Question> getRandomQuestions(int maxQuestions) {
+        List<Question> copy = new LinkedList<>(questions);
+        Collections.shuffle(copy);
+
+        return maxQuestions > copy.size() ? copy.subList(0, copy.size()) : copy.subList(0, maxQuestions);
+    }
+
     public void addQuestion(Question question) {
         if (question == null) {
             throw new IllegalArgumentException();
@@ -90,12 +127,13 @@ public class InteractiveTest extends Test {
         InteractiveTest that = (InteractiveTest) o;
         return Objects.equals(name, that.name) &&
                 Objects.equals(description, that.description) &&
+                Objects.equals(category, that.category) &&
                 Objects.equals(questions, that.questions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, questions);
+        return Objects.hash(name, description, category, questions);
     }
 
     @Override
@@ -104,7 +142,7 @@ public class InteractiveTest extends Test {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", questions=" + questions +
+                ", category=" + category +
                 '}';
     }
 }

@@ -22,9 +22,13 @@ public class SecurityConfig {
         RoleService service = new RoleServiceImpl();
         List<String> urlPatterns = new ArrayList<>();
 
-        urlPatterns.add("/test.jsp");
+        urlPatterns.add("/test_info.jsp");
+        urlPatterns.add("/test_page.jsp");
         urlPatterns.add("/test");
+        urlPatterns.add("/question");
+        urlPatterns.add("/welcome");
         urlPatterns.add("/all_test");
+        urlPatterns.add("/all_categories.jsp");
 
         try {
             role = service.findByName("student").orElseThrow(EmptyResultException::new);
@@ -34,8 +38,14 @@ public class SecurityConfig {
         mapConfig.put(role, urlPatterns);
 
         urlPatterns = new ArrayList<>();
-        urlPatterns.add("/test.jsp");
         urlPatterns.add("/admin.jsp");
+        urlPatterns.add("/test_info.jsp");
+        urlPatterns.add("/test_page.jsp");
+        urlPatterns.add("/test");
+        urlPatterns.add("/question");
+        urlPatterns.add("/welcome");
+        urlPatterns.add("/all_test");
+        urlPatterns.add("/all_categories.jsp");
 
         try {
             role = service.findByName("admin").orElseThrow(EmptyResultException::new);

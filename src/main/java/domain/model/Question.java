@@ -87,6 +87,16 @@ public class Question {
         this.test = test;
     }
 
+    public List<Option> getCorrect(){
+        List<Option> result = new ArrayList<>();
+        for (Option option : options) {
+            if (option.isCorrect()) {
+                result.add(option);
+            }
+        }
+        return result;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -106,8 +116,8 @@ public class Question {
         return "Question{" +
                 "id=" + id +
                 ", text='" + text + '\'' +
-                ", options=" + options +
-                ", test=" + test.getName() +
+//                ", options=" + options +
+//                ", test=" + test.getName() +
                 '}';
     }
 }

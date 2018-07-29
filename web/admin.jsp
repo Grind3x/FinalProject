@@ -12,8 +12,8 @@
     <![endif]-->
 </head>
 <style>
-    <%@include file="css/bootstrap.min.css" %>
-    <%@include file="css/styles.css" %>
+    <%@include file="/WEB-INF/style/bootstrap.min.css" %>
+    <%@include file="/WEB-INF/style/styles.css" %>
 </style>
 <body>
 <!-- header -->

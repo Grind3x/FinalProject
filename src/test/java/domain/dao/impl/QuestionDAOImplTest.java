@@ -2,6 +2,7 @@ package domain.dao.impl;
 
 import domain.dao.BaseTest;
 import domain.dao.*;
+import domain.model.Category;
 import domain.model.InteractiveTest;
 import domain.model.Question;
 import org.h2.tools.RunScript;
@@ -19,11 +20,13 @@ public class QuestionDAOImplTest extends BaseTest {
     private Connection connection;
     private TestDAO testDAO;
     private QuestionDAO questionDAO;
+    private CategoryDAO categoryDAO;
 
     public QuestionDAOImplTest() throws SQLException {
         connection = getH2Connection();
         testDAO = new TestDAOImpl(connection);
         questionDAO = new QuestionDAOImpl(connection);
+        categoryDAO = new CategoryDAOImpl(connection);
     }
 
     @Before
@@ -33,7 +36,9 @@ public class QuestionDAOImplTest extends BaseTest {
 
     @Test
     public void findByText() throws SQLException {
-        domain.model.Test test = new InteractiveTest("Test test");
+        Category category = new Category("test category");
+        categoryDAO.insert(category);
+        domain.model.Test test = new InteractiveTest("Test test", "test descr", category);
         testDAO.insert(test);
         Question question = new Question("Test", test);
         questionDAO.insert(question);
@@ -42,7 +47,9 @@ public class QuestionDAOImplTest extends BaseTest {
 
     @Test
     public void findByTest() throws SQLException {
-        domain.model.Test test = new InteractiveTest("Test test");
+        Category category = new Category("test category");
+        categoryDAO.insert(category);
+        domain.model.Test test = new InteractiveTest("Test test", "test descr", category);
         testDAO.insert(test);
         Question question = new Question("Test", test);
         questionDAO.insert(question);
@@ -64,7 +71,9 @@ public class QuestionDAOImplTest extends BaseTest {
 
     @Test
     public void findById() throws SQLException {
-        domain.model.Test test = new InteractiveTest("Test test");
+        Category category = new Category("test category");
+        categoryDAO.insert(category);
+        domain.model.Test test = new InteractiveTest("Test test", "test descr", category);
         testDAO.insert(test);
         Question question = new Question("Test", test);
         questionDAO.insert(question);
@@ -74,7 +83,9 @@ public class QuestionDAOImplTest extends BaseTest {
 
     @Test
     public void update() throws SQLException {
-        domain.model.Test test = new InteractiveTest("Test test");
+        Category category = new Category("test category");
+        categoryDAO.insert(category);
+        domain.model.Test test = new InteractiveTest("Test test", "test descr", category);
         testDAO.insert(test);
         Question question = new Question("Test", test);
         questionDAO.insert(question);
@@ -86,7 +97,9 @@ public class QuestionDAOImplTest extends BaseTest {
 
     @Test
     public void remove() throws SQLException {
-        domain.model.Test test = new InteractiveTest("Test test");
+        Category category = new Category("test category");
+        categoryDAO.insert(category);
+        domain.model.Test test = new InteractiveTest("Test test", "test descr", category);
         testDAO.insert(test);
         Question question = new Question("Test", test);
         questionDAO.insert(question);
@@ -102,7 +115,9 @@ public class QuestionDAOImplTest extends BaseTest {
     }
 
     private void insertFiveQuestions() throws SQLException {
-        domain.model.Test test = new InteractiveTest("Test test");
+        Category category = new Category("test category");
+        categoryDAO.insert(category);
+        domain.model.Test test = new InteractiveTest("Test test", "test descr", category);
         testDAO.insert(test);
         Question question1 = new Question("Question1", test);
         Question question2 = new Question("Question2", test);

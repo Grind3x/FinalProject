@@ -21,4 +21,10 @@ public abstract class Test {
 
     public abstract void addQuestion(Question question);
 
+    public abstract Category getCategory();
+
+    public abstract void setCategory(Category category);
+
+    public abstract List<Question> getRandomQuestions(int maxQuestions);
+
 }

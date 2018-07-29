@@ -1,9 +1,7 @@
 package domain.dao.impl;
 
-import domain.dao.BaseTest;
-import domain.dao.OptionDAO;
-import domain.dao.QuestionDAO;
-import domain.dao.TestDAO;
+import domain.dao.*;
+import domain.model.Category;
 import domain.model.InteractiveTest;
 import domain.model.Option;
 import domain.model.Question;
@@ -23,12 +21,14 @@ public class OptionDAOImplTest extends BaseTest {
     private TestDAO testDAO;
     private QuestionDAO questionDAO;
     private OptionDAO optionDAO;
+    private CategoryDAO categoryDAO;
 
     public OptionDAOImplTest() throws SQLException {
         connection = getH2Connection();
         testDAO = new TestDAOImpl(connection);
         questionDAO = new QuestionDAOImpl(connection);
         optionDAO = new OptionDAOImpl(connection);
+        categoryDAO = new CategoryDAOImpl(connection);
     }
 
     @Before
@@ -38,7 +38,9 @@ public class OptionDAOImplTest extends BaseTest {
 
     @Test
     public void findByQuestion() throws SQLException {
-        domain.model.Test test = new InteractiveTest("Test test");
+        Category category = new Category("test category");
+        categoryDAO.insert(category);
+        domain.model.Test test = new InteractiveTest("Test test", "test descr", category);
         testDAO.insert(test);
         Question question = new Question("Test question", test);
         questionDAO.insert(question);
@@ -62,19 +64,23 @@ public class OptionDAOImplTest extends BaseTest {
 
     @Test
     public void findById() throws SQLException {
-        domain.model.Test test = new InteractiveTest("Test test");
+        Category category = new Category("test category");
+        categoryDAO.insert(category);
+        domain.model.Test test = new InteractiveTest("Test test", "test descr", category);
         testDAO.insert(test);
         Question question = new Question("Test question", test);
         questionDAO.insert(question);
         Option option = new Option("Test option", question);
         optionDAO.insert(option);
 
-        assertEquals(Optional.ofNullable(option), optionDAO.findById(1L));
+        assertEquals(Optional.of(option), optionDAO.findById(1L));
     }
 
     @Test
     public void update() throws SQLException {
-        domain.model.Test test = new InteractiveTest("Test test");
+        Category category = new Category("test category");
+        categoryDAO.insert(category);
+        domain.model.Test test = new InteractiveTest("Test test", "test descr", category);
         testDAO.insert(test);
         Question question = new Question("Test question", test);
         questionDAO.insert(question);
@@ -87,7 +93,9 @@ public class OptionDAOImplTest extends BaseTest {
 
     @Test
     public void remove() throws SQLException {
-        domain.model.Test test = new InteractiveTest("Test test");
+        Category category = new Category("test category");
+        categoryDAO.insert(category);
+        domain.model.Test test = new InteractiveTest("Test test", "test descr", category);
         testDAO.insert(test);
         Question question = new Question("Test question", test);
         questionDAO.insert(question);
@@ -105,7 +113,9 @@ public class OptionDAOImplTest extends BaseTest {
     }
 
     private void insertFiveOptions() throws SQLException {
-        domain.model.Test test = new InteractiveTest("Test test");
+        Category category = new Category("test category");
+        categoryDAO.insert(category);
+        domain.model.Test test = new InteractiveTest("Test test", "test descr", category);
         testDAO.insert(test);
         Question question = new Question("Test question", test);
         questionDAO.insert(question);

@@ -95,7 +95,7 @@ public class Option {
         return "Option{" +
                 "id=" + id +
                 ", optionText='" + optionText + '\'' +
-                ", question=" + question.getText() +
+//                ", question=" + question.getText() +
                 ", correct=" + correct +
                 '}';
     }

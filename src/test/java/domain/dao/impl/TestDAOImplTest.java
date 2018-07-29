@@ -21,6 +21,7 @@ public class TestDAOImplTest extends BaseTest {
     private TestDAO testDAO;
     private QuestionDAO questionDAO;
     private OptionDAO optionDAO;
+    private CategoryDAO categoryDAO;
 
     public TestDAOImplTest() throws SQLException {
         connection = getH2Connection();
@@ -29,6 +30,7 @@ public class TestDAOImplTest extends BaseTest {
         testDAO = new TestDAOImpl(connection);
         questionDAO = new QuestionDAOImpl(connection);
         optionDAO = new OptionDAOImpl(connection);
+        categoryDAO = new CategoryDAOImpl(connection);
     }
 
     @Before
@@ -38,7 +40,9 @@ public class TestDAOImplTest extends BaseTest {
 
     @Test
     public void findByName() throws SQLException {
-        domain.model.Test test = new InteractiveTest("Test");
+        Category category = new Category("test category");
+        categoryDAO.insert(category);
+        domain.model.Test test = new InteractiveTest("Test test", "test descr", category);
         testDAO.insert(test);
         assertEquals(Optional.of(test), testDAO.findByName(test.getName()));
     }
@@ -49,7 +53,9 @@ public class TestDAOImplTest extends BaseTest {
         roleDAO.insert(role);
         User user = new User("Test name", "test@test.ua", "testpassword", role);
         userDAO.insert(user);
-        domain.model.Test test = new InteractiveTest("Test");
+        Category category = new Category("test category");
+        categoryDAO.insert(category);
+        domain.model.Test test = new InteractiveTest("Test test", "test descr", category);
         testDAO.insert(test);
         user.addAssessment(test, 95);
         userDAO.update(user);
@@ -89,7 +95,9 @@ public class TestDAOImplTest extends BaseTest {
     }
 
     private domain.model.Test insertTestWithTwoQuestions() throws SQLException {
-        domain.model.Test test = new InteractiveTest("Test1");
+        Category category = new Category("test category");
+        categoryDAO.insert(category);
+        domain.model.Test test = new InteractiveTest("Test test", "test descr", category);
         testDAO.insert(test);
         Question question1 = new Question("Test question1", test);
         Question question2 = new Question("Test question2", test);
@@ -131,11 +139,14 @@ public class TestDAOImplTest extends BaseTest {
     }
 
     private void insertFiveTests() throws SQLException {
-        domain.model.Test test1 = new InteractiveTest("Test1");
-        domain.model.Test test2 = new InteractiveTest("Test2");
-        domain.model.Test test3 = new InteractiveTest("Test3");
-        domain.model.Test test4 = new InteractiveTest("Test4");
-        domain.model.Test test5 = new InteractiveTest("Test5");
+        Category category = new Category("test category");
+        categoryDAO.insert(category);
+
+        domain.model.Test test1 = new InteractiveTest("Test1", "test descr", category);
+        domain.model.Test test2 = new InteractiveTest("Test2", "test descr", category);
+        domain.model.Test test3 = new InteractiveTest("Test3", "test descr", category);
+        domain.model.Test test4 = new InteractiveTest("Test4", "test descr", category);
+        domain.model.Test test5 = new InteractiveTest("Test5", "test descr", category);
 
         testDAO.insert(test1);
         testDAO.insert(test2);
@@ -152,16 +163,21 @@ public class TestDAOImplTest extends BaseTest {
 
     @Test
     public void findById() throws SQLException {
-        domain.model.Test test = new InteractiveTest("Test");
+        Category category = new Category("test category");
+        categoryDAO.insert(category);
+        domain.model.Test test = new InteractiveTest("Test test", "test descr", category);
         testDAO.insert(test);
         assertEquals(Optional.of(test), testDAO.findById(test.getId()));
     }
 
     @Test
     public void update() throws SQLException {
-        domain.model.Test test = new InteractiveTest("Test");
+        Category category = new Category("test category");
+        categoryDAO.insert(category);
+        domain.model.Test test = new InteractiveTest("Test test", "test descr", category);
         testDAO.insert(test);
         test.setName("Test2");
+        test.setDescription("Descr2");
         testDAO.update(test);
         assertFalse(testDAO.findByName("Test").isPresent());
         assertEquals(Optional.of(test), testDAO.findByName("Test2"));
@@ -169,7 +185,9 @@ public class TestDAOImplTest extends BaseTest {
 
     @Test
     public void remove() throws SQLException {
-        domain.model.Test test = new InteractiveTest("Test");
+        Category category = new Category("test category");
+        categoryDAO.insert(category);
+        domain.model.Test test = new InteractiveTest("Test test", "test descr", category);
         testDAO.insert(test);
         assertNotNull(testDAO.findByName("Test"));
         testDAO.remove(test);

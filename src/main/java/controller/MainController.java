@@ -25,7 +25,7 @@ public class MainController extends HttpServlet {
             RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/admin.jsp");
             requestDispatcher.forward(req, resp);
         } else if (user.getRole().getName().equals("student")) {
-            resp.sendRedirect("/test");
+            resp.sendRedirect("/welcome");
         }
     }
 }

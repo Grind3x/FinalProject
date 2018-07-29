@@ -1,5 +1,6 @@
 package domain.dao.impl;
 
+import domain.model.Option;
 import domain.model.Question;
 import domain.model.Test;
 import domain.dao.OptionDAO;
@@ -110,6 +111,10 @@ public class QuestionDAOImpl implements QuestionDAO {
             statement.setLong(4, question.getTest().getId());
             statement.executeUpdate();
 
+            if (question.getOptions().size() > 0) {
+                updateOptions(question.getOptions());
+            }
+
             question.setId(getGeneratedId(statement));
         }
     }
@@ -157,6 +162,13 @@ public class QuestionDAOImpl implements QuestionDAO {
             question.setTest(testDAO.findById(resultSet.getLong("test_id")).orElse(null));
         }
         return question;
+    }
+
+    private void updateOptions(List<Option> options) throws SQLException {
+        OptionDAO optionDAO = new OptionDAOImpl(connection);
+        for (Option option : options) {
+            optionDAO.update(option);
+        }
     }
 
     private Long getGeneratedId(PreparedStatement statement) throws SQLException {

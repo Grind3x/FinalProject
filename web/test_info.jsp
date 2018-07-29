@@ -1,18 +1,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <title>Bootstrap 3 Admin</title>
+    <title>Тест: ${test.getName()}</title>
     <meta name="generator" content="Bootply"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/WEB-INF/style/styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 </head>
 <style>
-    <%@include file="css/bootstrap.min.css" %>
-    <%@include file="css/styles.css" %>
     footer {
         position: fixed;
         height: 50px;
@@ -43,16 +43,17 @@
                 <div class="panel-heading">
                     <h4><c:out value="${test.getName()}"/></h4></div>
                 <div class="panel-body">
-                    <c:out value="${test.getDescription()}"/>
+                    ${test.getDescription()}
                 </div>
             </div>
-            <a href="/test?t=${test.getId()}&q=1"><button type="button" class="btn pull-right">Начать тест</button></a>
+            <a href="/test?t=${test.getId()}&q=1">
+                <button type="button" class="btn pull-right">Начать тест</button>
+            </a>
         </div>
     </div>
 </div>
 <footer class="text-center">2018, <strong>Grind3x</strong></footer>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/scripts.js"></script>
+
 </body>
 </html>
 

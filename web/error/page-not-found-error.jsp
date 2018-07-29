@@ -7,7 +7,7 @@
 </head>
 
 <style>
-    <%@include file="/style/404.css" %>
+    <%@include file="/WEB-INF/style/404.css" %>
 </style>
 <body>
 <div class="unicorn"></div>

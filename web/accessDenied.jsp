@@ -1,13 +1,13 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Page Not Found :(</title>
+    <title>403 Access Denied</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 </head>
 
 <style>
-    <%@include file="/style/404.css" %>
+    <%@include file="/WEB-INF/style/404.css" %>
 </style>
 <body>
 <div class="unicorn"></div>

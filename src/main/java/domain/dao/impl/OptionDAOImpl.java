@@ -1,5 +1,6 @@
 package domain.dao.impl;
 
+import domain.dao.QuestionDAO;
 import domain.model.Option;
 import domain.model.Question;
 import domain.dao.OptionDAO;
@@ -129,13 +130,14 @@ public class OptionDAOImpl implements OptionDAO {
     }
 
     private Option extractOptionFromResultSet(ResultSet resultSet, Question... questions) throws SQLException {
+        QuestionDAO questionDAO = new QuestionDAOImpl(connection);
         Option option = new Option();
         option.setId(resultSet.getLong("id"));
         option.setOptionText(resultSet.getString("option_text"));
         if (questions.length > 0) {
             option.setQuestion(questions[0]);
         } else {
-            option.setQuestion(new QuestionDAOImpl(connection).findById(resultSet.getLong("question_id")).orElse(null));
+            option.setQuestion(questionDAO.findById(resultSet.getLong("question_id")).orElse(null));
         }
         option.setCorrect(resultSet.getBoolean("correct"));
 
@@ -144,7 +146,7 @@ public class OptionDAOImpl implements OptionDAO {
 
     private Long getGeneratedId(PreparedStatement statement) throws SQLException {
         ResultSet resultSet = statement.getGeneratedKeys();
-        Long generatedKey = 0L;
+        long generatedKey = 0L;
         if (resultSet.next()) {
             generatedKey = resultSet.getLong(1);
         }
