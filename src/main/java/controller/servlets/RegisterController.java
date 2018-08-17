@@ -1,4 +1,4 @@
-package controller;
+package controller.servlets;
 
 import domain.model.Role;
 import domain.model.User;

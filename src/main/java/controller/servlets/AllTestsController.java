@@ -1,4 +1,4 @@
-package controller;
+package controller.servlets;
 
 import domain.model.Category;
 import domain.service.CategoryService;
@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/welcome")
-public class WelcomeController extends HttpServlet {
+@WebServlet("/tests")
+public class AllTestsController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         CategoryService service = new CategoryServiceImpl();

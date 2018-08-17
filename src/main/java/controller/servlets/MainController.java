@@ -1,4 +1,4 @@
-package controller;
+package controller.servlets;
 
 import domain.model.User;
 
@@ -22,10 +22,10 @@ public class MainController extends HttpServlet {
             RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/login.jsp");
             requestDispatcher.forward(req, resp);
         } else if (user.getRole().getName().equals("admin")) {
-            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/admin.jsp");
+            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/admin");
             requestDispatcher.forward(req, resp);
         } else if (user.getRole().getName().equals("student")) {
-            resp.sendRedirect("/welcome");
+            resp.sendRedirect("/tests");
         }
     }
 }

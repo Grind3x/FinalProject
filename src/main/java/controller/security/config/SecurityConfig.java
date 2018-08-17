@@ -24,10 +24,11 @@ public class SecurityConfig {
 
         urlPatterns.add("/test_info.jsp");
         urlPatterns.add("/test_page.jsp");
+        urlPatterns.add("/result.jsp");
         urlPatterns.add("/test");
+        urlPatterns.add("/result");
         urlPatterns.add("/question");
-        urlPatterns.add("/welcome");
-        urlPatterns.add("/all_test");
+        urlPatterns.add("/tests");
         urlPatterns.add("/all_categories.jsp");
 
         try {
@@ -37,15 +38,13 @@ public class SecurityConfig {
         }
         mapConfig.put(role, urlPatterns);
 
-        urlPatterns = new ArrayList<>();
-        urlPatterns.add("/admin.jsp");
-        urlPatterns.add("/test_info.jsp");
-        urlPatterns.add("/test_page.jsp");
-        urlPatterns.add("/test");
-        urlPatterns.add("/question");
-        urlPatterns.add("/welcome");
-        urlPatterns.add("/all_test");
-        urlPatterns.add("/all_categories.jsp");
+        urlPatterns = new ArrayList<>(urlPatterns);
+        urlPatterns.add("/admin/");
+        urlPatterns.add("/admin/index.jsp");
+        urlPatterns.add("/admin/add_test.jsp");
+        urlPatterns.add("/admin/remove_question.jsp");
+        urlPatterns.add("/admin/add_question.jsp");
+        urlPatterns.add("/admin/remove_test.jsp");
 
         try {
             role = service.findByName("admin").orElseThrow(EmptyResultException::new);

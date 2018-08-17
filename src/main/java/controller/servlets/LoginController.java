@@ -1,4 +1,4 @@
-package controller;
+package controller.servlets;
 
 import domain.dao.EmptyResultException;
 import domain.model.User;
@@ -30,13 +30,13 @@ public class LoginController extends HttpServlet {
             System.out.println(user);
 
             if (user != null && user.getRole().getName().equals("admin")) {
-                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/admin.jsp");
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/admin");
                 dispatcher.forward(req, resp);
             } else if (user != null && user.getRole().getName().equals("student")) {
-                resp.sendRedirect("/welcome");
+                resp.sendRedirect("/tests");
             }
         } else {
-            req.setAttribute("error", "Incorrect email or password");
+            req.setAttribute("error", true);
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/login.jsp");
             dispatcher.forward(req, resp);
         }

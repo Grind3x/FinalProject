@@ -36,16 +36,16 @@ public class SecurityUtils {
     }
 
     private static String getUrlPattern(HttpServletRequest request) {
-        String servletPath = request.getServletPath();
         String pathInfo = request.getPathInfo();
         String urlPattern;
 
+        urlPattern = request.getServletPath();
+
         if (pathInfo != null) {
-            urlPattern = servletPath + "/*";
+            urlPattern += "/*";
             return urlPattern;
         }
 
-        urlPattern = servletPath;
         return urlPattern;
     }
 }

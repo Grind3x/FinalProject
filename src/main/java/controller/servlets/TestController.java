@@ -1,4 +1,4 @@
-package controller;
+package controller.servlets;
 
 import domain.dao.EmptyResultException;
 import domain.model.Question;
@@ -18,7 +18,7 @@ import java.util.List;
 
 @WebServlet("/test")
 public class TestController extends HttpServlet {
-    private static final int MAX_QUESTIONS = 12;
+    private static final int MAX_QUESTIONS = 20;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -54,8 +54,9 @@ public class TestController extends HttpServlet {
                     }
                 }
                 session.setAttribute("test", test);
-                session.setAttribute("questions", test.getRandomQuestions(MAX_QUESTIONS));
-                session.setAttribute("max_questions", MAX_QUESTIONS);
+                List<Question> questions = test.getRandomQuestions(MAX_QUESTIONS);
+                session.setAttribute("questions", questions);
+                session.setAttribute("max_questions", questions.size());
 
                 RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/test_info.jsp");
                 requestDispatcher.forward(req, resp);

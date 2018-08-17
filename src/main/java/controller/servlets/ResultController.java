@@ -1,7 +1,10 @@
-package controller;
+package controller.servlets;
 
 import domain.model.Option;
 import domain.model.Question;
+import domain.model.User;
+import domain.service.TestService;
+import domain.service.impl.TestServiceImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -23,8 +26,10 @@ public class ResultController extends HttpServlet {
         HttpSession session = req.getSession();
         List<Question> questions = (List<Question>) session.getAttribute("questions");
         Map<Question, List<Option>> answers = (Map<Question, List<Option>>) session.getAttribute("answers");
-        System.out.println(questions);
-        System.out.println(answers);
+        User user = (User) session.getAttribute("user");
+        TestService testService = new TestServiceImpl();
+        testService.setAnswers(answers, user);
+
         int correct = 0;
 
         for (Question question : questions) {

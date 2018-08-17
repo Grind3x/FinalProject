@@ -1,20 +1,33 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="language"
+       value="${not empty param.language ? param.language : not empty lang ? lang : sessionScope.language}"
+       scope="session"/>
+<fmt:setLocale value="${language}"/>
+<fmt:setBundle basename="text"/>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${language}">
 <head>
+    <title>Тест: ${test.getName()}, вопрос ${question_number}</title>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <title>Тест: ${test.getName()}, вопрос ${question_number}</title>
     <meta name="generator" content="Bootply"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/WEB-INF/style/styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
+          integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 </head>
 <style>
+    <%@include file="/WEB-INF/style/bootstrap.min.css" %>
+    <%@include file="/WEB-INF/style/styles.css" %>
     footer {
-        position: fixed;
+        position: absolute;
         height: 50px;
         bottom: 0;
         width: 100%;
@@ -24,14 +37,17 @@
 <div id="top-nav" class="navbar navbar-inverse navbar-static-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="/">Главная</a>
+            <a class="navbar-brand" href="/tests"><fmt:message key="categories.home"/></a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li><p class="navbar-text pull-right">
                     Вы вошли как ${user.getFullName()}
                 </p></li>
-                <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>
+                <c:if test="${user.getRole().getName() eq 'admin'}">
+                    <li><a href="/admin/"><i class="fas fa-screwdriver"></i> Управление</a></li>
+                </c:if>
+                <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> Выйти</a></li>
             </ul>
         </div>
     </div>
@@ -42,7 +58,6 @@
             <div class="col-sm-2">
                 <table class="table table-borderless table-responsive-sm">
                     <tbody>
-
                     <c:set var="j" scope="page" value="1"/>
                     <c:forEach var="i" begin="1"
                                end="${(questions.size() % 3 eq 0 ? questions.size() / 3 : questions.size() / 3 + 1)}">
@@ -59,20 +74,16 @@
                                                 <button type="submit" formaction="/test?t=${test.getId()}&q=${k}"
                                                         class="btn btn-outline-info btn-block">${k}</button>
                                             </c:if>
-
                                         </c:if>
                                         <c:if test="${question_number eq k}">
                                             <a href="/test?t=${test.getId()}&q=${k}">
                                                 <button type="button" class="btn btn-success btn-block">${k}</button>
                                             </a>
                                         </c:if>
-
                                     </td>
                                 </c:if>
-
                             </c:forEach>
                         </tr>
-
                         <c:set var="j" scope="page" value="${j + 3}"/>
                     </c:forEach>
                     </tbody>

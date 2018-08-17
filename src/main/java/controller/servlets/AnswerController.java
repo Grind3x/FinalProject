@@ -1,4 +1,4 @@
-package controller;
+package controller.servlets;
 
 import domain.dao.EmptyResultException;
 import domain.model.Option;
